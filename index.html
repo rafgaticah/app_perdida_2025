@@ -400,7 +400,7 @@
             <h1>¡Bienvenido/a al Ejercicio de Evitar Pérdida!</h1>
             <div class="instructions">
                 <p>Este ejercicio es una adaptación de una actividad utilizada para estudiar la relación entre motivación y desempeño.</p>
-                <p>Tu objetivo es realizar una <strong>sustracción sucesiva de 13 unidades mentalmente</strong>, partiendo desde el número <strong>1000</strong>, hasta <strong>superar el número 900</strong>. Deberás ingresar el siguiente número en la secuencia.</p>
+                <p>Tu objetivo es realizar una <strong>sustracción sucesiva de 13 unidades</strong>, partiendo desde el número <strong>1000</strong>, hasta <strong>superar el número 900</strong>. Deberás ingresar el siguiente número en la secuencia.</p>
                 <p>Tienes <strong>4 bloques de un minuto</strong> de duración cada uno. Si cometes un error, la secuencia <strong>se reiniciará automáticamente desde 1000</strong>. Si logras superar el 900, el bloque se considera exitoso y no necesitarás seguir intentando en ese bloque.</p>
                 <p>Al inicio, cuentas con <strong>$200.000 de dinero ficticio</strong>. Se te restará dinero si no completas la secuencia exitosamente en cada bloque, de la siguiente manera:</p>
                 <ul class="list-disc pl-5 mt-2">
@@ -490,7 +490,7 @@
                 </ul>
 
             <h2 class="result-metric-large text-red-500">Errores Totales: <span id="total-errors-display">0</span></h2>
-            <h2 class="final-money">Dinero Final Total: <span id="final-money-display"></span></h2> <!-- Removed the explicit $ -->
+            <h2 class="final-money">Dinero Final Total: <span id="final-money-display"></span></h2>
             <h2 class="result-metric-large text-blue-500">Índice de Aprendizaje: <span id="learning-index-display"></span></h2>
             <h2 class="result-metric-large text-fuchsia-600">Estado Anímico: <span id="final-mood-display"></span> / 10</h2>
             <h2 class="result-metric-large text-orange-500">Estado Cognitivo: <span id="final-cognitive-display"></span> / 10</h2>
@@ -498,26 +498,26 @@
 
             <div class="share-results-section">
                 <h2>Registra tus resultados</h2>
-                <p>Para registrar tus resultados en la Google Sheet, sigue estos pasos:</p>
+                <p>Para registrar tus resultados en la hoja de Excel, sigue estos pasos:</p>
                 <ol class="list-decimal list-inside text-left ml-4">
                     <li>Haz clic en el botón "Copiar Datos" para guardar tus resultados en el portapapeles.</li>
-                    <li>Haz clic en "Abrir Google Sheet" para ir a la hoja de cálculo.</li>
-                    <li>En la Google Sheet, busca la primera fila disponible y **pega los datos** (Ctrl+V o Cmd+V) en la primera columna.</li>
+                    <li>Haz clic en "Abrir Excel" para ir a la hoja de cálculo.</li>
+                    <li>En la hoja de Excel, busca la primera fila disponible y **pega los datos** (Ctrl+V o Cmd+V) en la primera columna.</li>
                 </ol>
                 
-                <button id="copy-results-button" class="copy-button">Copiar Datos para Google Sheets</button>
+                <button id="copy-results-button" class="copy-button">Copiar Datos para Excel</button>
                 <p id="copy-feedback-message" class="copy-feedback"></p>
 
-                <a id="google-sheet-link" href="https://docs.google.com/spreadsheets/d/10XfjtPk03WRx3C-0MD4lC28O0FtfEE2ndxkIj_m--bE/edit?usp=sharing" target="_blank" class="mt-4">
-                    Abrir Google Sheet para Pegar Resultados
+                <a id="excel-link" href="https://uccl0-my.sharepoint.com/:x:/g/personal/rigatica_uc_cl/ESDL0UwD9MlLknXtF8rLifwBv8G7pHcY9hrMyl0YJUH0wA?e=cmc2fg" target="_blank" class="mt-4">
+                    Abrir Excel para Pegar Resultados
                 </a>
             </div>
         </div>
     </div>
 
     <script>
-        // URL de tu Google Sheet (para abrir y pegar manualmente)
-        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/10XfjtPk03WRx3C-0MD4lC28O0FtfEE2ndxkIj_m--bE/edit?usp=sharing'; 
+        // URL de tu hoja de Excel (SharePoint)
+        const EXCEL_URL = 'https://uccl0-my.sharepoint.com/:x:/g/personal/rigatica_uc_cl/ESDL0UwD9MlLknXtF8rLifwBv8G7pHcY9hrMyl0YJUH0wA?e=cmc2fg'; 
 
         // Variables globales
         let currentNumber = 1000;
@@ -572,7 +572,7 @@
         const finalMoneyDisplay = document.getElementById('final-money-display');
         const learningIndexDisplay = document.getElementById('learning-index-display');
         const totalErrorsDisplay = document.getElementById('total-errors-display');
-        const googleSheetLink = document.getElementById('google-sheet-link');
+        const excelLink = document.getElementById('excel-link'); // Changed from googleSheetLink
 
         const currentMoneyLargeDisplay = document.getElementById('current-money-large');
         const moneyImagesContainer = document.getElementById('money-images-container'); // Note: This will not be used for accumulating images in 'Perdida'
@@ -901,7 +901,7 @@
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
-                    copyFeedbackMessage.textContent = '¡Datos copiados! Ahora puedes pegarlos en tu Google Sheet.';
+                    copyFeedbackMessage.textContent = '¡Datos copiados! Ahora puedes pegarlos en tu hoja de Excel.';
                     copyFeedbackMessage.style.color = '#38a169';
                 } else {
                     copyFeedbackMessage.textContent = 'Error al copiar. Por favor, copia manualmente.';
@@ -958,7 +958,7 @@
             finalMoodDisplay.textContent = finalMood;
             finalCognitiveDisplay.textContent = finalCognitiveState;
 
-            googleSheetLink.href = GOOGLE_SHEET_URL;
+            excelLink.href = EXCEL_URL; // Use excelLink for Perdida app
         }
 
         // Event listener for the copy button
