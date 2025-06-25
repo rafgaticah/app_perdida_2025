@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evitar Pérdida: Ejercicio Aritmético</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #1a202c;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .instructions, .results-summary {
+            text-align: left;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        .task-area {
+            background-color: #e2e8f0;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .current-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3182ce;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 12px 20px;
+            border: 2px solid #a0aec0;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            width: 150px;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus {
+            border-color: #3182ce;
+            outline: none;
+        }
+        button {
+            background-color: #3182ce;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #2b6cb0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        button:disabled {
+            background-color: #cbd5e0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 1rem;
+            min-height: 24px; /* Para evitar CLS */
+        }
+        .message.error {
+            color: #e53e3e; /* Rojo para errores */
+        }
+        .message.success {
+            color: #38a169; /* Verde para aciertos */
+        }
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .block-info { /* Original block info style, will be overridden for large display */
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        /* New style for the large block number display */
+        .block-number-display-large {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2d3748; /* Dark gray for text, similar to other headings */
+            margin-bottom: 10px; /* Space between block number and money */
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .results-table th, .results-table td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+        }
+        .results-table th {
+            background-color: #edf2f7;
+            color: #2d3748;
+            font-weight: bold;
+        }
+        .results-table td {
+            background-color: #ffffff;
+            color: #4a5568;
+        }
+        .final-money {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #38a169; /* Always green now */
+            margin-top: 30px;
+        }
+        /* New styles for specific result metrics */
+        .result-metric-large {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .text-black { color: #000000; }
+        .text-red-500 { color: #ef4444; }
+        .text-blue-500 { color: #3b82f6; }
+        .text-fuchsia-600 { color: #c026d3; }
+        .text-orange-500 { color: #f97316; }
+
+
+        .hidden {
+            display: none;
+        }
+        .interstitial-screen {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3182ce;
+            text-align: center;
+            padding: 50px;
+        }
+        .results-detail-item {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 8px;
+            text-align: left;
+            padding-left: 20px;
+        }
+        .block-result-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .block-result-list li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            background-color: #ffffff;
+        }
+        .block-result-list li:last-child {
+            border-bottom: none;
+        }
+        .block-result-list li strong {
+            color: #2d3748;
+        }
+        .money-display-area {
+            background-color: #d1fae5; /* Adjusted for contrast with loss scenario */
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #a7f3d0;
+        }
+        .money-images-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-height: 30px;
+        }
+        .money-emoji {
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+        /* Estilos para la información del bloque en la pantalla intersticial */
+        .interstitial-block-results {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .interstitial-money-change { /* Generic class for gain/loss display */
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .interstitial-money-change.positive {
+            color: #38a169; /* Green for avoided loss */
+        }
+        .interstitial-money-change.negative {
+            color: #e53e3e; /* Red for incurred loss */
+        }
+        .interstitial-money-images {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .interstitial-money-images .money-emoji {
+            font-size: 3rem;
+        }
+        .interstitial-current-money-display {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .share-results-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .share-results-section p {
+            margin-bottom: 15px;
+        }
+        .share-results-section a {
+            display: inline-block;
+            background-color: #4285F4;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .share-results-section a:hover {
+            background-color: #357ae8;
+        }
+        .copy-button {
+            background-color: #1a73e8;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .copy-button:hover {
+            background-color: #0b4b8a;
+        }
+        .copy-feedback {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #38a169;
+            min-height: 18px;
+        }
+        /* New styles for mood assessment screen */
+        .mood-assessment-screen {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        .slider-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            background-color: #edf2f7;
+            position: relative;
+        }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 5px;
+            padding: 0 12px;
+        }
+        .slider-emojis {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .slider-emojis span {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #cbd5e0;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0 10px;
+            flex-grow: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #3182ce;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #3182ce;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .slider-value-display-wrapper {
+            position: relative;
+            height: 20px;
+            width: 100%;
+        }
+        .slider-value-display {
+            position: absolute;
+            top: -25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #3182ce;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            border: 1px solid #a0aec0;
+            min-width: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="intro-screen">
+            <h1>¡Bienvenido/a al Ejercicio de Evitar Pérdida!</h1>
+            <div class="instructions">
+                <p>Este ejercicio es una adaptación de una actividad utilizada para estudiar la relación entre motivación y desempeño.</p>
+                <p>Tu objetivo es realizar una <strong>sustracción sucesiva de 13 unidades</strong>, partiendo desde el número <strong>1000</strong>, hasta <strong>superar el número 900</strong>. Deberás ingresar el siguiente número en la secuencia.</p>
+                <p>Tienes <strong>4 bloques de un minuto</strong> de duración cada uno. Si cometes un error, la secuencia <strong>se reiniciará automáticamente desde 1000</strong>. Si logras superar el 900, el bloque se considera exitoso y no necesitarás seguir intentando en ese bloque.</p>
+                <p>Al inicio, cuentas con <strong>$200.000 de dinero ficticio</strong>. Se te restará dinero si no completas la secuencia exitosamente en cada bloque, de la siguiente manera:</p>
+                <ul class="list-disc pl-5 mt-2">
+                    <li>Primera secuencia fallida: <strong>$10.000</strong></li>
+                    <li>Segunda secuencia fallida: <strong>$20.000</strong></li>
+                    <li>Tercera secuencia fallida: <strong>$20.000</strong></li>
+                    <li>Cuarta secuencia fallida: <strong>$50.000</strong></li>
+                </ul>
+                <p class="mt-4">¡Tu desempeño influirá directamente en la cantidad de dinero que logres conservar!</p>
+            </div>
+            <button id="start-button">Comenzar Ejercicio</button>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <!-- Bloque de información movido y estilizado -->
+            <div class="block-number-display-large">
+                Bloque: <span id="block-number">1</span> / 4
+            </div>
+
+            <div class="money-display-area">
+                <p class="text-xl text-gray-700 mb-2">Dinero Actual:</p>
+                <div id="current-money-large" class="text-5xl font-extrabold text-green-600 mb-4">$200.000</div>
+                <div id="money-images-container" class="money-images-container">
+                    </div>
+            </div>
+
+            <div class="timer-display">Tiempo restante: <span id="timer">60</span> segundos</div>
+            <div class="task-area">
+                <p class="text-xl text-gray-700 mb-3">Número actual:</p>
+                <div class="current-number" id="current-display">1000</div>
+                <div class="input-group">
+                    <input type="number" id="user-input" placeholder="Ingresa tu respuesta">
+                    <button id="submit-button">Enviar</button>
+                </div>
+                <div class="message" id="feedback-message"></div>
+            </div>
+        </div>
+
+        <div id="interstitial-screen" class="hidden interstitial-screen">
+            <h2 id="interstitial-block-title">Bloque Completado</h2>
+            <p id="interstitial-money-change" class="interstitial-money-change"></p>
+            <p class="interstitial-current-money-display">Dinero Actual: <span id="interstitial-current-money"></span></p>
+            <div id="interstitial-money-images" class="interstitial-money-images"></div>
+            <p class="mt-8">El siguiente bloque comienza en <span id="interstitial-timer">10</span> segundos.</p>
+        </div>
+
+        <div id="mood-assessment-screen" class="hidden mood-assessment-screen">
+            <h1>Evalúa tu Estado</h1>
+            <p class="instructions">Por favor, indica tu estado actual en las siguientes escalas. Mueve el deslizador para seleccionar el número.</p>
+
+            <div class="slider-group">
+                <h3>Estado Anímico: Negativo (1) — Positivo (10)</h3>
+                <div class="slider-value-display-wrapper">
+                    <span id="mood-value-display" class="slider-value-display">5</span>
+                </div>
+                <div class="slider-emojis">
+                    <span>😞</span>
+                    <input type="range" min="1" max="10" value="5" id="mood-slider">
+                    <span>😄</span>
+                </div>
+                <div class="slider-labels">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                </div>
+            </div>
+
+            <div class="slider-group">
+                <h3>Estado Cognitivo: Descansado (1) — Cansado (10)</h3>
+                <div class="slider-value-display-wrapper">
+                    <span id="cognitive-value-display" class="slider-value-display">5</span>
+                </div>
+                <div class="slider-emojis">
+                    <span>😌</span>
+                    <input type="range" min="1" max="10" value="5" id="cognitive-slider">
+                    <span>😩</span>
+                </div>
+                <div class="slider-labels">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                </div>
+            </div>
+
+            <button id="continue-to-results-button" class="mt-8">Ver Resultados Finales</button>
+        </div>
+
+        <div id="results-screen" class="hidden">
+            <h2 class="result-metric-large text-black">Resumen por Bloque</h2>
+            <ul id="results-list-body" class="block-result-list">
+                </ul>
+
+            <h2 class="result-metric-large text-red-500">Errores Totales: <span id="total-errors-display">0</span></h2>
+            <h2 class="final-money">Dinero Final Total: <span id="final-money-display"></span></h2> <!-- Removed the explicit $ -->
+            <h2 class="result-metric-large text-blue-500">Índice de Aprendizaje: <span id="learning-index-display"></span></h2>
+            <h2 class="result-metric-large text-fuchsia-600">Estado Anímico: <span id="final-mood-display"></span> / 10</h2>
+            <h2 class="result-metric-large text-orange-500">Estado Cognitivo: <span id="final-cognitive-display"></span> / 10</h2>
+
+
+            <div class="share-results-section">
+                <h2>Registra tus resultados</h2>
+                <p>Para registrar tus resultados en la Google Sheet, sigue estos pasos:</p>
+                <ol class="list-decimal list-inside text-left ml-4">
+                    <li>Haz clic en el botón "Copiar Datos" para guardar tus resultados en el portapapeles.</li>
+                    <li>Haz clic en "Abrir Google Sheet" para ir a la hoja de cálculo.</li>
+                    <li>En la Google Sheet, busca la primera fila disponible y **pega los datos** (Ctrl+V o Cmd+V) en la primera columna.</li>
+                </ol>
+                
+                <button id="copy-results-button" class="copy-button">Copiar Datos para Google Sheets</button>
+                <p id="copy-feedback-message" class="copy-feedback"></p>
+
+                <a id="google-sheet-link" href="https://docs.google.com/spreadsheets/d/10XfjtPk03WRx3C-0MD4lC28O0FtfEE2ndxkIj_m--bE/edit?usp=sharing" target="_blank" class="mt-4">
+                    Abrir Google Sheet para Pegar Resultados
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL de tu Google Sheet (para abrir y pegar manualmente)
+        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/10XfjtPk03WRx3C-0MD4lC28O0FtfEE2ndxkIj_m--bE/edit?usp=sharing'; 
+
+        // Variables globales
+        let currentNumber = 1000;
+        let expectedNextNumber = 1000 - 13;
+        let sequenceStep = 0;
+        let timerInterval;
+        let interstitialTimerInterval;
+        let timeLeft = 60;
+        let interstitialTimeLeft = 10;
+        let currentBlock = 1;
+        const totalBlocks = 4;
+        let totalMoney = 200000; // Dinero inicial para Evitar Pérdida
+        let successfulBlocksCount = 0; // Cuenta bloques exitosos (sin pérdida)
+        let failedSequencesCount = 0; // Cuenta secuencias fallidas (donde se incurre en penalización)
+        let blockErrors = 0;
+        let totalErrors = 0;
+        let blockSuccess = false; // True if sequence completed in this block, False if time out or error reset
+        let blockStartTime;
+        let blockEndTime;
+        let blockTimes = []; // Stores times only for successful blocks (no penalty)
+
+        const blockResults = []; // Stores detailed results for each block
+
+        // Variables para estado de ánimo y cognitivo
+        let finalMood = 5; // Default value
+        let finalCognitiveState = 5; // Default value
+        const TASK_TYPE = "Perdida"; // Identificador de la tarea para copiar
+
+        // Penalizaciones por secuencia fallida (no por cada error individual)
+        const penalties = {
+            1: 10000,
+            2: 20000,
+            3: 20000,
+            4: 50000
+        };
+
+        // Elementos del DOM
+        const introScreen = document.getElementById('intro-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const interstitialScreen = document.getElementById('interstitial-screen');
+        const moodAssessmentScreen = document.getElementById('mood-assessment-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startButton = document.getElementById('start-button');
+        const blockNumberDisplay = document.getElementById('block-number');
+        const timerDisplay = document.getElementById('timer');
+        const interstitialTimerDisplay = document.getElementById('interstitial-timer');
+        const currentDisplay = document.getElementById('current-display');
+        const userInput = document.getElementById('user-input');
+        const submitButton = document.getElementById('submit-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const resultsListBody = document.getElementById('results-list-body');
+        const finalMoneyDisplay = document.getElementById('final-money-display');
+        const learningIndexDisplay = document.getElementById('learning-index-display');
+        const totalErrorsDisplay = document.getElementById('total-errors-display');
+        const googleSheetLink = document.getElementById('google-sheet-link');
+
+        const currentMoneyLargeDisplay = document.getElementById('current-money-large');
+        const moneyImagesContainer = document.getElementById('money-images-container'); // Note: This will not be used for accumulating images in 'Perdida'
+
+        const interstitialBlockTitle = document.getElementById('interstitial-block-title');
+        const interstitialMoneyChangeDisplay = document.getElementById('interstitial-money-change');
+        const interstitialMoneyImages = document.getElementById('interstitial-money-images');
+        const interstitialCurrentMoneyDisplay = document.getElementById('interstitial-current-money');
+
+        const moodSlider = document.getElementById('mood-slider');
+        const cognitiveSlider = document.getElementById('cognitive-slider');
+        const continueToResultsButton = document.getElementById('continue-to-results-button');
+        const finalMoodDisplay = document.getElementById('final-mood-display');
+        const finalCognitiveDisplay = document.getElementById('final-cognitive-display');
+
+        const copyResultsButton = document.getElementById('copy-results-button');
+        const copyFeedbackMessage = document.getElementById('copy-feedback-message');
+
+        const moodValueDisplay = document.getElementById('mood-value-display');
+        const cognitiveValueDisplay = document.getElementById('cognitive-value-display');
+
+
+        // Función para resetear la secuencia
+        function resetSequence() {
+            currentNumber = 1000;
+            expectedNextNumber = 1000 - 13;
+            sequenceStep = 0;
+            currentDisplay.textContent = currentNumber;
+            userInput.value = '';
+            userInput.focus();
+        }
+
+        // Función para iniciar el temporizador de un bloque
+        function startTimer() {
+            timeLeft = 60;
+            timerDisplay.textContent = timeLeft;
+            blockStartTime = Date.now();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    userInput.disabled = true;
+                    submitButton.disabled = true;
+                    endBlock('Tiempo agotado');
+                }
+            }, 1000);
+        }
+
+        // Función para registrar un error
+        function recordError() {
+            blockErrors++;
+            totalErrors++;
+            feedbackMessage.textContent = '¡Error! Reiniciando secuencia desde 1000.';
+            feedbackMessage.className = 'message error';
+
+            resetSequence();
+        }
+
+        // Función para finalizar un bloque
+        function endBlock(status) {
+            clearInterval(timerInterval);
+            blockEndTime = Date.now();
+            let timeTaken = (blockEndTime - blockStartTime) / 1000;
+
+            let moneyLostThisBlock = 0; // Amount lost in this block
+            let blockStatus = status;
+            let blockTimeForTable = 'N/A';
+
+            feedbackMessage.textContent = '';
+            feedbackMessage.className = 'message';
+
+            if (blockSuccess) {
+                // Block was successful, no loss incurred for this block
+                moneyLostThisBlock = 0;
+                blockStatus = 'Éxito'; // Or "Pérdida evitada"
+                blockTimes.push(timeTaken);
+                blockTimeForTable = timeTaken.toFixed(2);
+                successfulBlocksCount++; // Increment count of successful blocks (losses avoided)
+
+                // No money emoji added to moneyImagesContainer (main screen) in Perdida task
+            } else {
+                // Block was not successful (timeout or manual reset due to error)
+                failedSequencesCount++;
+                moneyLostThisBlock = penalties[failedSequencesCount] || 0; // Get penalty based on number of previous failures
+                totalMoney -= moneyLostThisBlock; // Subtract from total money
+                blockStatus = status === 'Tiempo agotado' ? 'Tiempo agotado' : 'Fallo';
+                blockTimeForTable = (status === 'Tiempo agotado') ? '60.00' : 'N/A';
+            }
+
+            blockResults.push({
+                block: currentBlock,
+                errors: blockErrors,
+                time: blockTimeForTable,
+                status: blockStatus,
+                moneyChange: -moneyLostThisBlock // Store as negative to indicate loss
+            });
+
+            currentBlock++;
+            if (currentBlock <= totalBlocks) {
+                gameScreen.classList.add('hidden');
+                interstitialScreen.classList.remove('hidden');
+
+                // Update content of interstitial screen
+                interstitialBlockTitle.textContent = `Bloque ${currentBlock - 1} Completado`;
+                
+                // Display money change for this block (gain or loss)
+                if (moneyLostThisBlock === 0) {
+                    interstitialMoneyChangeDisplay.textContent = `Pérdida en este bloque: $0 (Pérdida evitada)`;
+                    interstitialMoneyChangeDisplay.className = 'interstitial-money-change positive';
+                } else {
+                    interstitialMoneyChangeDisplay.textContent = `Pérdida en este bloque: ${moneyLostThisBlock.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}`;
+                    interstitialMoneyChangeDisplay.className = 'interstitial-money-change negative';
+                }
+                
+                interstitialCurrentMoneyDisplay.textContent = totalMoney.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+                
+                // Update money images on interstitial screen: totalBlocks minus failedSequencesCount
+                interstitialMoneyImages.innerHTML = '';
+                const imagesToShow = totalBlocks - failedSequencesCount; // This is the core logic for 'losing' images
+                for (let i = 0; i < imagesToShow; i++) {
+                    const moneyEmojiLarge = document.createElement('span');
+                    moneyEmojiLarge.textContent = '💰';
+                    moneyEmojiLarge.className = 'money-emoji';
+                    interstitialMoneyImages.appendChild(moneyEmojiLarge);
+                }
+
+                interstitialTimeLeft = 10;
+                interstitialTimerDisplay.textContent = interstitialTimeLeft;
+                interstitialTimerInterval = setInterval(() => {
+                    interstitialTimeLeft--;
+                    interstitialTimerDisplay.textContent = interstitialTimeLeft;
+                    if (interstitialTimeLeft <= 0) {
+                        clearInterval(interstitialTimerInterval);
+                        interstitialScreen.classList.add('hidden');
+                        gameScreen.classList.remove('hidden');
+                        resetBlock();
+                        startTimer();
+                    }
+                }, 1000);
+            } else {
+                // All blocks completed, show mood assessment screen
+                gameScreen.classList.add('hidden');
+                interstitialScreen.classList.add('hidden');
+                showMoodAssessmentScreen();
+            }
+        }
+
+        // Function to reset block state
+        function resetBlock() {
+            blockNumberDisplay.textContent = currentBlock;
+            currentMoneyLargeDisplay.textContent = totalMoney.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+            
+            blockErrors = 0;
+            blockSuccess = false;
+            resetSequence();
+            userInput.value = '';
+            userInput.disabled = false;
+            submitButton.disabled = false;
+        }
+
+        // Event listener for the submit button
+        submitButton.addEventListener('click', () => {
+            const userAnswer = parseInt(userInput.value);
+
+            if (isNaN(userAnswer)) {
+                feedbackMessage.textContent = 'Por favor, ingresa un número válido.';
+                feedbackMessage.className = 'message error';
+                userInput.value = '';
+                userInput.focus();
+                return;
+            }
+
+            if (userAnswer === expectedNextNumber) {
+                currentNumber = userAnswer;
+                currentDisplay.textContent = currentNumber;
+                sequenceStep++;
+                expectedNextNumber = currentNumber - 13;
+                feedbackMessage.textContent = '¡Correcto!';
+                feedbackMessage.className = 'message success';
+                userInput.value = '';
+                userInput.focus();
+
+                if (currentNumber <= 900) {
+                    blockSuccess = true;
+                    userInput.disabled = true;
+                    submitButton.disabled = true;
+                    endBlock('Éxito');
+                }
+            } else {
+                recordError();
+            }
+        });
+
+        // Allow submitting with Enter key
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !submitButton.disabled) {
+                submitButton.click();
+            }
+        });
+
+        // Function to calculate learning index (same as Ganancia)
+        function calculateLearningIndex() {
+            const errorsPerBlock = blockResults.map(b => b.errors);
+            const errorsBlock1 = errorsPerBlock[0];
+
+            let errorsBlock3Or4 = Infinity;
+            if (errorsPerBlock.length > 2) {
+                errorsBlock3Or4 = Math.min(errorsBlock3Or4, errorsPerBlock[2]);
+            }
+            if (errorsPerBlock.length > 3) {
+                errorsBlock3Or4 = Math.min(errorsBlock3Or4, errorsPerBlock[3]);
+            }
+
+            let errorsForIndexCalculation = errorsBlock1;
+            if (errorsPerBlock.length > 2 && errorsPerBlock[2] !== undefined) {
+                errorsForIndexCalculation = Math.min(errorsForIndexCalculation, errorsPerBlock[2]);
+            }
+            if (errorsPerBlock.length > 3 && errorsPerBlock[3] !== undefined) {
+                errorsForIndexCalculation = Math.min(errorsForIndexCalculation, errorsPerBlock[3]);
+            }
+
+
+            if (errorsBlock1 === 0) {
+                if (blockTimes.length > 0) {
+                    const timeBlock1 = blockTimes[0];
+                    let timeBlock3Or4 = timeBlock1;
+
+                    if (blockResults.length > 2 && blockResults[2].status === 'Éxito' && blockResults[2].time !== 'N/A') {
+                        timeBlock3Or4 = Math.min(timeBlock3Or4, parseFloat(blockResults[2].time));
+                    }
+                    if (blockResults.length > 3 && blockResults[3].status === 'Éxito' && blockResults[3].time !== 'N/A') {
+                        timeBlock3Or4 = Math.min(timeBlock3Or4, parseFloat(blockResults[3].time));
+                    }
+
+                    if (timeBlock1 === 0) {
+                        return 'N/A (Tiempo en bloque 1 fue cero)';
+                    } else {
+                        return ((timeBlock1 - timeBlock3Or4) / timeBlock1).toFixed(2);
+                    }
+
+                } else {
+                    return 'N/A (No hay tiempos exitosos para calcular el índice)';
+                }
+            } else if (errorsBlock1 > 0) {
+                const denominator = errorsBlock1;
+                if (denominator === 0) {
+                    return 'N/A (División por cero)';
+                }
+                return ((errorsBlock1 - errorsForIndexCalculation) / denominator).toFixed(2);
+            } else {
+                return 'N/A (Sin datos de errores en bloque 1)';
+            }
+        }
+
+        // Function to show mood assessment screen (same as Ganancia)
+        function showMoodAssessmentScreen() {
+            moodAssessmentScreen.classList.remove('hidden');
+            moodSlider.value = finalMood;
+            cognitiveSlider.value = finalCognitiveState;
+
+            moodValueDisplay.textContent = moodSlider.value;
+            cognitiveValueDisplay.textContent = cognitiveSlider.value;
+
+            moodSlider.oninput = function() {
+                moodValueDisplay.textContent = this.value;
+                const thumbWidth = 25;
+                const trackWidth = this.offsetWidth - thumbWidth;
+                const value = (this.value - this.min) / (this.max - this.min);
+                const displayPosition = value * trackWidth;
+                moodValueDisplay.style.left = `${displayPosition}px`;
+                const offset = thumbWidth * (0.5 - value);
+                moodValueDisplay.style.transform = `translateX(${offset}px)`;
+            };
+
+            cognitiveSlider.oninput = function() {
+                cognitiveValueDisplay.textContent = this.value;
+                const thumbWidth = 25;
+                const trackWidth = this.offsetWidth - thumbWidth;
+                const value = (this.value - this.min) / (this.max - this.min);
+                const displayPosition = value * trackWidth;
+                cognitiveValueDisplay.style.left = `${displayPosition}px`;
+                const offset = thumbWidth * (0.5 - value);
+                cognitiveValueDisplay.style.transform = `translateX(${offset}px)`;
+            };
+
+            setTimeout(() => {
+                moodSlider.oninput();
+                cognitiveSlider.oninput();
+            }, 50);
+
+            continueToResultsButton.onclick = () => {
+                finalMood = parseInt(moodSlider.value);
+                finalCognitiveState = parseInt(cognitiveSlider.value);
+                moodAssessmentScreen.classList.add('hidden');
+                showResults();
+            };
+        }
+
+        // Function to copy results to clipboard (adapted for Perdida)
+        function copyResultsToClipboard() {
+            const errorsBlockData = [];
+            const timeBlockData = [];
+
+            for (let i = 0; i < totalBlocks; i++) {
+                errorsBlockData.push(blockResults[i] ? blockResults[i].errors : 'N/A');
+                timeBlockData.push(blockResults[i] ? (blockResults[i].time === 'N/A' ? 'N/A' : parseFloat(blockResults[i].time)) : 'N/A');
+            }
+
+            const dataToCopy = [
+                TASK_TYPE,          // Task Type (Ganancia/Perdida)
+                totalErrors,
+                totalMoney, // Final money after losses
+                calculateLearningIndex(),
+                ...errorsBlockData,
+                ...timeBlockData,
+                finalMood,
+                finalCognitiveState
+            ].join('\t');
+
+            const dummyTextArea = document.createElement('textarea');
+            dummyTextArea.value = dataToCopy;
+            document.body.appendChild(dummyTextArea);
+            dummyTextArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    copyFeedbackMessage.textContent = '¡Datos copiados! Ahora puedes pegarlos en tu Google Sheet.';
+                    copyFeedbackMessage.style.color = '#38a169';
+                } else {
+                    copyFeedbackMessage.textContent = 'Error al copiar. Por favor, copia manualmente.';
+                    copyFeedbackMessage.style.color = '#e53e3e';
+                }
+            } catch (err) {
+                copyFeedbackMessage.textContent = 'Error al copiar. Tu navegador no soporta esta función. Por favor, copia manualmente.';
+                copyFeedbackMessage.style.color = '#e53e3e';
+                console.error('Error al intentar copiar:', err);
+            }
+            document.body.removeChild(dummyTextArea);
+            setTimeout(() => {
+                copyFeedbackMessage.textContent = '';
+            }, 5000);
+        }
+
+        // Function to show final results (adapted for Perdida)
+        function showResults() {
+            gameScreen.classList.add('hidden');
+            interstitialScreen.classList.add('hidden');
+            moodAssessmentScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+
+            resultsListBody.innerHTML = '';
+
+            for (let i = 0; i < totalBlocks; i++) {
+                const res = blockResults[i] || { block: i + 1, errors: 'N/A', time: 'N/A', moneyChange: 'N/A', status: 'Incompleto' };
+                const listItem = document.createElement('li');
+                let moneyDisplay = '';
+                if (res.moneyChange === 0) {
+                    moneyDisplay = 'Pérdida: $0 (Evitada)';
+                } else if (typeof res.moneyChange === 'number') {
+                    // Ensure the dollar sign is part of the locale string, not prepended
+                    moneyDisplay = `Pérdida: ${Math.abs(res.moneyChange).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}`;
+                } else {
+                    moneyDisplay = `Pérdida: ${res.moneyChange}`;
+                }
+                
+                listItem.innerHTML = `
+                    <strong>Bloque ${res.block}:</strong> 
+                    Errores: ${res.errors}, 
+                    Tiempo: ${res.time}s, 
+                    ${moneyDisplay}
+                `;
+                resultsListBody.appendChild(listItem);
+            }
+
+            totalErrorsDisplay.textContent = totalErrors;
+            finalMoneyDisplay.textContent = totalMoney.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+            // Always green for total money in Perdida task, as requested
+            finalMoneyDisplay.style.color = '#38a169'; 
+
+            learningIndexDisplay.textContent = calculateLearningIndex();
+            finalMoodDisplay.textContent = finalMood;
+            finalCognitiveDisplay.textContent = finalCognitiveState;
+
+            googleSheetLink.href = GOOGLE_SHEET_URL;
+        }
+
+        // Event listener for the copy button
+        copyResultsButton.addEventListener('click', copyResultsToClipboard);
+
+        // Event listener to start the game
+        startButton.addEventListener('click', () => {
+            introScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            totalMoney = 200000; // Reset to initial money for Perdida task
+            successfulBlocksCount = 0; // Reset for Perdida task
+            failedSequencesCount = 0; // Reset for Perdida task
+            totalErrors = 0;
+            blockResults.length = 0;
+            blockTimes.length = 0;
+            currentBlock = 1;
+            moneyImagesContainer.innerHTML = ''; // Ensure main game screen money images are cleared
+
+            finalMood = 5;
+            finalCognitiveState = 5;
+
+            resetBlock();
+            startTimer();
+        });
+    </script>
+</body>
+</html>
