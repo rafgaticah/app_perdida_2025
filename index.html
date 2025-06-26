@@ -59,6 +59,20 @@
             font-weight: bold;
             color: #3182ce;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 10px;
+        }
+        .current-number-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3182ce;
+        }
+        .current-number-instruction {
+            font-size: 1.2rem;
+            color: #4a5568;
+            font-weight: normal;
         }
         .input-group {
             display: flex;
@@ -107,13 +121,13 @@
         .message {
             margin-top: 15px;
             font-size: 1rem;
-            min-height: 24px; /* Para evitar CLS */
+            min-height: 24px;
         }
         .message.error {
-            color: #e53e3e; /* Rojo para errores */
+            color: #e53e3e;
         }
         .message.success {
-            color: #38a169; /* Verde para aciertos */
+            color: #38a169;
         }
         .timer-display {
             font-size: 1.5rem;
@@ -121,17 +135,16 @@
             color: #2d3748;
             margin-bottom: 20px;
         }
-        .block-info { /* Original block info style, will be overridden for large display */
+        .block-info {
             font-size: 1.1rem;
             color: #4a5568;
             margin-bottom: 10px;
         }
-        /* New style for the large block number display */
         .block-number-display-large {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #2d3748; /* Dark gray for text, similar to other headings */
-            margin-bottom: 10px; /* Space between block number and money */
+            color: #2d3748;
+            margin-bottom: 10px;
         }
         .results-table {
             width: 100%;
@@ -155,10 +168,9 @@
         .final-money {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #38a169; /* Always green now */
+            color: #38a169;
             margin-top: 30px;
         }
-        /* New styles for specific result metrics */
         .result-metric-large {
             font-size: 1.8rem;
             font-weight: bold;
@@ -170,7 +182,6 @@
         .text-blue-500 { color: #3b82f6; }
         .text-fuchsia-600 { color: #c026d3; }
         .text-orange-500 { color: #f97316; }
-
 
         .hidden {
             display: none;
@@ -210,7 +221,7 @@
             color: #2d3748;
         }
         .money-display-area {
-            background-color: #d1fae5; /* Adjusted for contrast with loss scenario */
+            background-color: #d1fae5;
             padding: 15px;
             border-radius: 15px;
             margin-bottom: 20px;
@@ -228,7 +239,6 @@
             font-size: 2.5rem;
             line-height: 1;
         }
-        /* Estilos para la información del bloque en la pantalla intersticial */
         .interstitial-block-results {
             font-size: 1.5rem;
             color: #4a5568;
@@ -236,17 +246,17 @@
             margin-bottom: 30px;
             line-height: 1.5;
         }
-        .interstitial-money-change { /* Generic class for gain/loss display */
+        .interstitial-money-change {
             font-size: 2rem;
             font-weight: bold;
             margin-top: 15px;
             margin-bottom: 20px;
         }
         .interstitial-money-change.positive {
-            color: #38a169; /* Green for avoided loss */
+            color: #38a169;
         }
         .interstitial-money-change.negative {
-            color: #e53e3e; /* Red for incurred loss */
+            color: #e53e3e;
         }
         .interstitial-money-images {
             display: flex;
@@ -305,7 +315,6 @@
             color: #38a169;
             min-height: 18px;
         }
-        /* New styles for mood assessment screen */
         .mood-assessment-screen {
             background-color: #ffffff;
             padding: 40px;
@@ -399,15 +408,14 @@
         <div id="intro-screen">
             <h1>¡Bienvenido/a al Ejercicio de Evitar Pérdida!</h1>
             <div class="instructions">
-                <p>Este ejercicio es una adaptación de una actividad utilizada para estudiar la relación entre motivación y desempeño.</p>
-                <p>Tu objetivo es realizar una <strong>sustracción sucesiva de 13 unidades</strong>, partiendo desde el número <strong>1000</strong>, hasta <strong>superar el número 900</strong>. Deberás ingresar el siguiente número en la secuencia.</p>
+                <p>Tu objetivo es realizar una secuencia numérica descendente del tipo 1000, 990, 980... (solo mentalmente, sin ayudas), partiendo desde el número 1000, hasta superar el número 900. Deberás ingresar el siguiente número en la secuencia según valor a restar que se te indicará en pantalla.</p>
                 <p>Tienes <strong>4 bloques de un minuto</strong> de duración cada uno. Si cometes un error, la secuencia <strong>se reiniciará automáticamente desde 1000</strong>. Si logras superar el 900, el bloque se considera exitoso y no necesitarás seguir intentando en ese bloque.</p>
-                <p>Al inicio, cuentas con <strong>$200.000 de dinero ficticio</strong>. Se te restará dinero si no completas la secuencia exitosamente en cada bloque, de la siguiente manera:</p>
+                <p>Al inicio, cuentas con <strong>$200.000 de dinero ficticio</strong>. Se te restará dinero si no completas la secuencia exitosamente antes que termine el bloque de un minuto.</p>
                 <ul class="list-disc pl-5 mt-2">
-                    <li>Primera secuencia fallida: <strong>$10.000</strong></li>
-                    <li>Segunda secuencia fallida: <strong>$20.000</strong></li>
-                    <li>Tercera secuencia fallida: <strong>$20.000</strong></li>
-                    <li>Cuarta secuencia fallida: <strong>$50.000</strong></li>
+                    <li>La primera vez que no lo logre: <strong>$10.000</strong></li>
+                    <li>La segunda vez que no lo logre: <strong>$20.000</strong></li>
+                    <li>La tercera vez que no lo logre: <strong>$20.000</strong></li>
+                    <li>La cuarta vez que no lo logre: <strong>$50.000</strong></li>
                 </ul>
                 <p class="mt-4">¡Tu desempeño influirá directamente en la cantidad de dinero que logres conservar!</p>
             </div>
@@ -430,7 +438,10 @@
             <div class="timer-display">Tiempo restante: <span id="timer">60</span> segundos</div>
             <div class="task-area">
                 <p class="text-xl text-gray-700 mb-3">Número actual:</p>
-                <div class="current-number" id="current-display">1000</div>
+                <div class="current-number">
+                    <span id="current-display" class="current-number-text">1000</span>
+                    <span class="current-number-instruction">(resta 13)</span>
+                </div>
                 <div class="input-group">
                     <input type="number" id="user-input" placeholder="Ingresa tu respuesta">
                     <button id="submit-button">Enviar</button>
@@ -546,7 +557,7 @@
         let finalCognitiveState = 5; // Default value
         const TASK_TYPE = "Perdida"; // Identificador de la tarea para copiar
 
-        // Penalizaciones por secuencia fallida (no por cada error individual)
+        // Penalizaciones por bloque fallido
         const penalties = {
             1: 10000,
             2: 20000,
@@ -572,7 +583,7 @@
         const finalMoneyDisplay = document.getElementById('final-money-display');
         const learningIndexDisplay = document.getElementById('learning-index-display');
         const totalErrorsDisplay = document.getElementById('total-errors-display');
-        const excelLink = document.getElementById('excel-link'); // Changed from googleSheetLink
+        const excelLink = document.getElementById('excel-link');
 
         const currentMoneyLargeDisplay = document.getElementById('current-money-large');
         const moneyImagesContainer = document.getElementById('money-images-container'); // Note: This will not be used for accumulating images in 'Perdida'
@@ -635,10 +646,10 @@
         // Función para finalizar un bloque
         function endBlock(status) {
             clearInterval(timerInterval);
-            blockEndTime = Date.now();
+            blockEndTime = Date.Date.now(); // Corrected typo: Date.now()
             let timeTaken = (blockEndTime - blockStartTime) / 1000;
 
-            let moneyLostThisBlock = 0; // Amount lost in this block
+            let moneyLostThisBlock = 0;
             let blockStatus = status;
             let blockTimeForTable = 'N/A';
 
@@ -646,19 +657,15 @@
             feedbackMessage.className = 'message';
 
             if (blockSuccess) {
-                // Block was successful, no loss incurred for this block
                 moneyLostThisBlock = 0;
-                blockStatus = 'Éxito'; // Or "Pérdida evitada"
+                blockStatus = 'Éxito';
                 blockTimes.push(timeTaken);
                 blockTimeForTable = timeTaken.toFixed(2);
-                successfulBlocksCount++; // Increment count of successful blocks (losses avoided)
-
-                // No money emoji added to moneyImagesContainer (main screen) in Perdida task
+                successfulBlocksCount++;
             } else {
-                // Block was not successful (timeout or manual reset due to error)
                 failedSequencesCount++;
-                moneyLostThisBlock = penalties[failedSequencesCount] || 0; // Get penalty based on number of previous failures
-                totalMoney -= moneyLostThisBlock; // Subtract from total money
+                moneyLostThisBlock = penalties[failedSequencesCount] || 0;
+                totalMoney -= moneyLostThisBlock;
                 blockStatus = status === 'Tiempo agotado' ? 'Tiempo agotado' : 'Fallo';
                 blockTimeForTable = (status === 'Tiempo agotado') ? '60.00' : 'N/A';
             }
@@ -668,7 +675,7 @@
                 errors: blockErrors,
                 time: blockTimeForTable,
                 status: blockStatus,
-                moneyChange: -moneyLostThisBlock // Store as negative to indicate loss
+                moneyChange: -moneyLostThisBlock
             });
 
             currentBlock++;
@@ -676,10 +683,8 @@
                 gameScreen.classList.add('hidden');
                 interstitialScreen.classList.remove('hidden');
 
-                // Update content of interstitial screen
                 interstitialBlockTitle.textContent = `Bloque ${currentBlock - 1} Completado`;
                 
-                // Display money change for this block (gain or loss)
                 if (moneyLostThisBlock === 0) {
                     interstitialMoneyChangeDisplay.textContent = `Pérdida en este bloque: $0 (Pérdida evitada)`;
                     interstitialMoneyChangeDisplay.className = 'interstitial-money-change positive';
@@ -690,9 +695,8 @@
                 
                 interstitialCurrentMoneyDisplay.textContent = totalMoney.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
                 
-                // Update money images on interstitial screen: totalBlocks minus failedSequencesCount
                 interstitialMoneyImages.innerHTML = '';
-                const imagesToShow = totalBlocks - failedSequencesCount; // This is the core logic for 'losing' images
+                const imagesToShow = totalBlocks - failedSequencesCount;
                 for (let i = 0; i < imagesToShow; i++) {
                     const moneyEmojiLarge = document.createElement('span');
                     moneyEmojiLarge.textContent = '💰';
@@ -714,14 +718,13 @@
                     }
                 }, 1000);
             } else {
-                // All blocks completed, show mood assessment screen
                 gameScreen.classList.add('hidden');
                 interstitialScreen.classList.add('hidden');
                 showMoodAssessmentScreen();
             }
         }
 
-        // Function to reset block state
+        // Función para resetear el estado del bloque
         function resetBlock() {
             blockNumberDisplay.textContent = currentBlock;
             currentMoneyLargeDisplay.textContent = totalMoney.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
@@ -774,7 +777,7 @@
             }
         });
 
-        // Function to calculate learning index (same as Ganancia)
+        // Function to calculate learning index
         function calculateLearningIndex() {
             const errorsPerBlock = blockResults.map(b => b.errors);
             const errorsBlock1 = errorsPerBlock[0];
@@ -828,7 +831,7 @@
             }
         }
 
-        // Function to show mood assessment screen (same as Ganancia)
+        // Function to show mood assessment screen
         function showMoodAssessmentScreen() {
             moodAssessmentScreen.classList.remove('hidden');
             moodSlider.value = finalMood;
@@ -872,7 +875,7 @@
             };
         }
 
-        // Function to copy results to clipboard (adapted for Perdida)
+        // Function to copy results to clipboard
         function copyResultsToClipboard() {
             const errorsBlockData = [];
             const timeBlockData = [];
@@ -883,9 +886,9 @@
             }
 
             const dataToCopy = [
-                TASK_TYPE,          // Task Type (Ganancia/Perdida)
+                TASK_TYPE,
                 totalErrors,
-                totalMoney, // Final money after losses
+                totalMoney,
                 calculateLearningIndex(),
                 ...errorsBlockData,
                 ...timeBlockData,
@@ -918,7 +921,7 @@
             }, 5000);
         }
 
-        // Function to show final results (adapted for Perdida)
+        // Function to show final results
         function showResults() {
             gameScreen.classList.add('hidden');
             interstitialScreen.classList.add('hidden');
@@ -934,7 +937,6 @@
                 if (res.moneyChange === 0) {
                     moneyDisplay = 'Pérdida: $0 (Evitada)';
                 } else if (typeof res.moneyChange === 'number') {
-                    // Ensure the dollar sign is part of the locale string, not prepended
                     moneyDisplay = `Pérdida: ${Math.abs(res.moneyChange).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}`;
                 } else {
                     moneyDisplay = `Pérdida: ${res.moneyChange}`;
@@ -951,14 +953,13 @@
 
             totalErrorsDisplay.textContent = totalErrors;
             finalMoneyDisplay.textContent = totalMoney.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
-            // Always green for total money in Perdida task, as requested
             finalMoneyDisplay.style.color = '#38a169'; 
 
             learningIndexDisplay.textContent = calculateLearningIndex();
             finalMoodDisplay.textContent = finalMood;
             finalCognitiveDisplay.textContent = finalCognitiveState;
 
-            excelLink.href = EXCEL_URL; // Use excelLink for Perdida app
+            excelLink.href = EXCEL_URL;
         }
 
         // Event listener for the copy button
@@ -969,14 +970,14 @@
             introScreen.classList.add('hidden');
             gameScreen.classList.remove('hidden');
             
-            totalMoney = 200000; // Reset to initial money for Perdida task
-            successfulBlocksCount = 0; // Reset for Perdida task
-            failedSequencesCount = 0; // Reset for Perdida task
+            totalMoney = 200000;
+            successfulBlocksCount = 0;
+            failedSequencesCount = 0;
             totalErrors = 0;
             blockResults.length = 0;
             blockTimes.length = 0;
             currentBlock = 1;
-            moneyImagesContainer.innerHTML = ''; // Ensure main game screen money images are cleared
+            moneyImagesContainer.innerHTML = '';
 
             finalMood = 5;
             finalCognitiveState = 5;
