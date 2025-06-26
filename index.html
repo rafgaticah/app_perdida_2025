@@ -408,7 +408,7 @@
         <div id="intro-screen">
             <h1>¡Bienvenido/a al Ejercicio de Evitar Pérdida!</h1>
             <div class="instructions">
-                <p>Tu objetivo es realizar una secuencia numérica descendente del tipo 1000, 990, 980... (solo mentalmente, sin ayudas), partiendo desde el número 1000, hasta superar el número 900. Deberás ingresar el siguiente número en la secuencia según valor a restar que se te indicará en pantalla. Presionar enviar o tecla enter.</p>
+                <p>Tu objetivo es realizar una secuencia numérica descendente del tipo 1000, 990, 980... (solo mentalmente, sin ayudas), partiendo desde el número 1000, hasta superar el número 900. Deberás ingresar el siguiente número en la secuencia según valor a restar que se te indicará en pantalla. Escribe el número y presiona enviar en la pantalla o enter del teclado.</p>
                 <p>Tienes <strong>4 bloques de un minuto</strong> de duración cada uno. Si cometes un error, la secuencia <strong>se reiniciará automáticamente desde 1000</strong>. Si logras superar el 900, el bloque se considera exitoso y no necesitarás seguir intentando en ese bloque.</p>
                 <p>Al inicio, cuentas con <strong>$200.000 de dinero ficticio</strong>. Se te restará dinero si no completas la secuencia exitosamente antes que termine el bloque de un minuto.</p>
                 <ul class="list-disc pl-5 mt-2">
@@ -586,7 +586,7 @@
         const excelLink = document.getElementById('excel-link');
 
         const currentMoneyLargeDisplay = document.getElementById('current-money-large');
-        const moneyImagesContainer = document.getElementById('money-images-container'); // Note: This will not be used for accumulating images in 'Perdida'
+        const moneyImagesContainer = document.getElementById('money-images-container');
 
         const interstitialBlockTitle = document.getElementById('interstitial-block-title');
         const interstitialMoneyChangeDisplay = document.getElementById('interstitial-money-change');
@@ -646,7 +646,7 @@
         // Función para finalizar un bloque
         function endBlock(status) {
             clearInterval(timerInterval);
-            blockEndTime = Date.Date.now(); // Corrected typo: Date.now()
+            blockEndTime = Date.now();
             let timeTaken = (blockEndTime - blockStartTime) / 1000;
 
             let moneyLostThisBlock = 0;
